@@ -50,10 +50,10 @@ const Home = () => {
         <Card className="w-full">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
-              Quantum Health
+              Nexus Health
             </CardTitle>
             <CardDescription>
-              Personalized health guidance powered by Quantum AI
+              Personalized health guidance powered by Nexus AI
             </CardDescription>
           </CardHeader>
           <CardContent>
