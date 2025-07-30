@@ -177,147 +177,155 @@ const HealthDataPanel = ({
         </div>
       </div>
 
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="text-sm font-medium text-gray-600 mb-3">
-          Connected Devices
-        </h3>
-        <div className="grid grid-cols-2 gap-2">
-          {metrics.map((metric, index) => (
-            <Card key={index} className="bg-gray-50 border-0 shadow-sm">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div
-                      className={`p-1.5 rounded-full ${getStatusColor(metric.status)}`}
-                    >
-                      {metric.icon}
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-gray-500">
-                        {metric.name}
-                      </p>
-                      <div className="flex items-center">
-                        <span className="text-sm font-semibold">
-                          {metric.value}
-                        </span>
-                        <span className="text-xs text-gray-500 ml-1">
-                          {metric.unit}
-                        </span>
-                        {metric.change && (
-                          <span
-                            className={`text-xs ml-2 flex items-center ${metric.change.direction === "up" ? "text-red-500" : "text-green-500"}`}
-                          >
-                            {metric.change.direction === "up" ? (
-                              <ArrowUp className="h-3 w-3 mr-0.5" />
-                            ) : (
-                              <ArrowDown className="h-3 w-3 mr-0.5" />
-                            )}
-                            {metric.change.value}
+      <div className="flex-1 min-h-0 flex flex-col">
+        <div className="overflow-auto flex-1 min-h-0 p-4 border-b border-gray-200">
+          <h3 className="text-sm font-medium text-gray-600 mb-3">
+            Connected Devices
+          </h3>
+          <div className="grid grid-cols-2 gap-2">
+            {metrics.map((metric, index) => (
+              <Card key={index} className="bg-gray-50 border-0 shadow-sm">
+                <CardContent className="p-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div
+                        className={`p-1.5 rounded-full ${getStatusColor(
+                          metric.status
+                        )}`}
+                      >
+                        {metric.icon}
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-gray-500">
+                          {metric.name}
+                        </p>
+                        <div className="flex items-center">
+                          <span className="text-sm font-semibold">
+                            {metric.value}
                           </span>
-                        )}
+                          <span className="text-xs text-gray-500 ml-1">
+                            {metric.unit}
+                          </span>
+                          {metric.change && (
+                            <span
+                              className={`text-xs ml-2 flex items-center ${
+                                metric.change.direction === "up"
+                                  ? "text-red-500"
+                                  : "text-green-500"
+                              }`}
+                            >
+                              {metric.change.direction === "up" ? (
+                                <ArrowUp className="h-3 w-3 mr-0.5" />
+                              ) : (
+                                <ArrowDown className="h-3 w-3 mr-0.5" />
+                              )}
+                              {metric.change.value}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={`h-2 w-2 rounded-full ${getStatusColor(
+                        metric.status
+                      )}`}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+        <div className="flex-1 min-h-0 overflow-auto">
+          <Tabs defaultValue="trends" className="w-full">
+            <div className="px-4 pt-2">
+              <TabsList className="w-full">
+                <TabsTrigger value="trends" className="flex-1">
+                  Trends
+                </TabsTrigger>
+                <TabsTrigger value="patterns" className="flex-1">
+                  Detected Patterns
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="trends" className="p-4 space-y-4">
+              <div className="space-y-4">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Heart Rate (24h)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-[150px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={historicalData.heartRate}>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                          <XAxis dataKey="time" tick={{ fontSize: 10 }} />
+                          <YAxis tick={{ fontSize: 10 }} />
+                          <Tooltip />
+                          <Line
+                            type="monotone"
+                            dataKey="value"
+                            stroke="#ef4444"
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Temperature (24h)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-[150px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={historicalData.temperature}>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                          <XAxis dataKey="time" tick={{ fontSize: 10 }} />
+                          <YAxis tick={{ fontSize: 10 }} />
+                          <Tooltip />
+                          <Line
+                            type="monotone"
+                            dataKey="value"
+                            stroke="#f97316"
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="patterns" className="p-4">
+              <div className="space-y-3">
+                {detectedPatterns.map((pattern) => (
+                  <div
+                    key={pattern.id}
+                    className={`p-3 border rounded-lg ${getSeverityColor(
+                      pattern.severity
+                    )}`}
+                  >
+                    <div className="flex items-start space-x-2">
+                      <AlertCircle className="h-5 w-5 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-medium">{pattern.title}</h4>
+                        <p className="text-xs mt-1">{pattern.description}</p>
                       </div>
                     </div>
                   </div>
-                  <div
-                    className={`h-2 w-2 rounded-full ${getStatusColor(metric.status)}`}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
-      </div>
-
-      <div className="flex-grow overflow-auto">
-        <Tabs defaultValue="trends" className="w-full">
-          <div className="px-4 pt-2">
-            <TabsList className="w-full">
-              <TabsTrigger value="trends" className="flex-1">
-                Trends
-              </TabsTrigger>
-              <TabsTrigger value="patterns" className="flex-1">
-                Detected Patterns
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value="trends" className="p-4 space-y-4">
-            <div className="space-y-4">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Heart Rate (24h)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[150px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={historicalData.heartRate}>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                        <XAxis dataKey="time" tick={{ fontSize: 10 }} />
-                        <YAxis tick={{ fontSize: 10 }} />
-                        <Tooltip />
-                        <Line
-                          type="monotone"
-                          dataKey="value"
-                          stroke="#ef4444"
-                          strokeWidth={2}
-                          dot={false}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Temperature (24h)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[150px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={historicalData.temperature}>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                        <XAxis dataKey="time" tick={{ fontSize: 10 }} />
-                        <YAxis tick={{ fontSize: 10 }} />
-                        <Tooltip />
-                        <Line
-                          type="monotone"
-                          dataKey="value"
-                          stroke="#f97316"
-                          strokeWidth={2}
-                          dot={false}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="patterns" className="p-4">
-            <div className="space-y-3">
-              {detectedPatterns.map((pattern) => (
-                <div
-                  key={pattern.id}
-                  className={`p-3 border rounded-lg ${getSeverityColor(pattern.severity)}`}
-                >
-                  <div className="flex items-start space-x-2">
-                    <AlertCircle className="h-5 w-5 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-medium">{pattern.title}</h4>
-                      <p className="text-xs mt-1">{pattern.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
       </div>
     </div>
   );
