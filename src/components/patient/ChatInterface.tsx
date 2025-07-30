@@ -115,16 +115,20 @@ const ChatInterface = () => {
 
               <TabsContent
                 value="chat"
-                className="flex flex-1 overflow-hidden mt-0 border-t pt-4"
+                className="flex overflow-hidden mt-0 pt-0"
               >
-                <div className="flex flex-1 overflow-hidden">
+                <div className="flex flex-1 overflow-hidden border-t pt-4">
                   <div className="flex-1 overflow-hidden">
                     <ScrollArea className="h-[calc(100vh-240px)] pr-4 pl-2">
                       <div className="flex flex-col space-y-4 pb-4">
                         {messages.map((message) => (
                           <div
                             key={message.id}
-                            className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                            className={`flex ${
+                              message.sender === "user"
+                                ? "justify-end"
+                                : "justify-start"
+                            }`}
                           >
                             <div className="flex items-end space-x-2">
                               {message.sender === "ai" && (
@@ -207,7 +211,7 @@ const ChatInterface = () => {
 
               <TabsContent
                 value="insights"
-                className="flex-1 overflow-auto mt-0 border-t pt-4"
+                className="overflow-auto mt-0 border-t pt-0"
               >
                 <div className="p-4">
                   <h3 className="text-lg font-medium mb-4">Health Insights</h3>
@@ -247,7 +251,7 @@ const ChatInterface = () => {
 
               <TabsContent
                 value="history"
-                className="flex-1 overflow-auto mt-0 border-t pt-4"
+                className="overflow-auto mt-0 border-t pt-0"
               >
                 <div className="p-4">
                   <h3 className="text-lg font-medium mb-4">
